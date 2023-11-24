@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:onanmedia_test/presentation/dashboard/dashboard_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onanmedia_test/presentation/bloc/auth_bloc/auth_bloc.dart';
+
 import 'package:onanmedia_test/widgets/custom_widget.dart';
+
+import '../dashboard/dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,11 +26,9 @@ class _LoginScreenState extends State<LoginScreen> {
         height: double.infinity,
         child: SingleChildScrollView(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.fromLTRB(24, 60, 24, 12),
+                margin: const EdgeInsets.fromLTRB(24, 60, 24, 12),
                 child: const Column(
                   children: [
                     Text(
@@ -53,121 +55,116 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(
-                width: MediaQuery.sizeOf(context).width / 2,
-                height: MediaQuery.sizeOf(context).width / 2,
+                height: MediaQuery.sizeOf(context).width / 2.5,
+                width: MediaQuery.sizeOf(context).width / 2.5,
                 child: Image.asset(
                   "assets/images/logo.png",
                   fit: BoxFit.fill,
                 ),
               ),
-              Text(
+              const Text(
                 'Login',
                 style: TextStyle(
                   color: Color(0xFF2DBAB1),
                   fontSize: 27,
-                  fontFamily: 'Righteous',
                   fontWeight: FontWeight.w700,
                   height: 0,
                 ),
               ),
               // mulai
-              Padding(
-                padding: const EdgeInsets.all(18),
-                child: Form(
-                  key: _formKeyLogin,
-                  child: Column(
-                    children: <Widget>[
-                      CustomTextFormFieldWidget(
-                        iconData: Icons.email,
-                        textFieldController: emailController,
-                        typeTextField: TypeTextField.email,
-                        hintText: "Ketik Email Anda",
-                      ),
-                      CustomTextFormFieldWidget(
-                        iconData: Icons.lock,
-                        textFieldController: passwordController,
-                        typeTextField: TypeTextField.password,
-                        hintText: "Ketik Kata Sandi / Password",
-                      ),
+              BlocConsumer<AuthBloc, AuthState>(
+                listener: (context, state) {
+                  if (state is LoadingLogin) {
+                    showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 120),
+                            child: Dialog(
+                              insetPadding: EdgeInsets.zero,
+                              clipBehavior: Clip.antiAliasWithSaveLayer,
 
-                      const SizedBox(height: 30),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.width / 7,
-                        width: MediaQuery.of(context).size.width / 1.2,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 3,
-                            shadowColor: Colors.black,
-                            backgroundColor: Color(0xFF21ABA5),
-                            // backgroundColor: (buttonName.name == ButtonName.mainButton.name)
-                            //     ? mainGreen
-                            //     : mainWhite,
-                            // (customColor != null)
-                            //     ? customColor
-                            //     : ((buttonName.name == ButtonName.login.name))
-                            //         ? mainGreen
-                            //         : mainWhite,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DashboardScreen(),
+                              elevation: 1,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      8.0)), //this right here
+                              child: Container(
+                                height: MediaQuery.of(context).size.height / 8,
+                                width: MediaQuery.of(context).size.width / 4,
+                                child: const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CircularProgressIndicator.adaptive(),
+                                    SizedBox(height: 15),
+                                    Text('Loading...'),
+                                  ],
                                 ),
-                                (route) => false);
-                          },
-                          // () {
-                          //   (buttonName.name == ButtonName.mainButton.name)
-                          //       ? Navigator.pushNamed(context, AppRoutes.login)
-                          //       : Navigator.pushNamed(context, AppRoutes.register);
-                          // },
-                          child: Text(
-                            // (buttonName.name == ButtonName.login.name) ? "LOGIN" : "DAFTAR",
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 22,
-                              // color: (buttonName.name == ButtonName.mainButton.name)
-                              //     ? mainWhite
-                              //     : mainGreen,
+                              ),
+                            ),
+                          );
+                        });
+                    // SizedBox(
+                    //   width: MediaQuery.sizeOf(context).width / 2,
+                    //   height: MediaQuery.sizeOf(context).width / 3,
+                    //   child: const Center(
+                    //       child: CircularProgressIndicator.adaptive()),
+                    // );
+                  }
+
+                  if (state is FailureLogin) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(18),
+                              color: Colors.white,
+                            ),
+                            width: MediaQuery.sizeOf(context).width / 2,
+                            height: MediaQuery.sizeOf(context).width / 3,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(state.messageError),
+                                const SizedBox(height: 8),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF2DBAB1)),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("OK"),
+                                )
+                              ],
                             ),
                           ),
+                        );
+                      },
+                    );
+                  }
+
+                  if (state is SuccessLogin) {
+                    Navigator.pop(context);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DashboardScreen(userProfile: state.result),
                         ),
-                      ),
-                      // const Padding(
-                      //   padding: EdgeInsets.only(top: 30),
-                      //   child: Text("Atau lanjutkan dengan"),
-                      // ),
-                      // const SizedBox(height: 30),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     border: Border.all(color: Colors.white, width: 2),
-                      //     shape: BoxShape.rectangle,
-                      //   ),
-                      //   child: IconButton(
-                      //     onPressed: () {},
-                      //     icon: Image.asset(googleLogo),
-                      //   ),
-                      // ),
-                      // const SizedBox(height: 50),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   crossAxisAlignment: CrossAxisAlignment.center,
-                      //   children: <Widget>[
-                      //     const Text("Belum menjadi anggota?"),
-                      //     TextButton(
-                      //         onPressed: () {
-                      //           // Navigator.pushNamed(
-                      //           //     context, AppRoutes.register);
-                      //         },
-                      //         child: const Text("Daftar sekarang")),
-                      //   ],
-                      // )
-                    ],
-                  ),
-                ),
+                        (route) => false);
+                  }
+                },
+                builder: (context, state) {
+                  return FormLoginWidget(
+                      formKeyLogin: _formKeyLogin,
+                      emailController: emailController,
+                      passwordController: passwordController);
+                },
               ),
             ],
           ),
@@ -415,5 +412,141 @@ class _LoginScreenState extends State<LoginScreen> {
     //     ),
     //   ),
     // );
+  }
+}
+
+class FormLoginWidget extends StatelessWidget {
+  const FormLoginWidget({
+    super.key,
+    required GlobalKey<FormState> formKeyLogin,
+    required this.emailController,
+    required this.passwordController,
+  }) : _formKeyLogin = formKeyLogin;
+
+  final GlobalKey<FormState> _formKeyLogin;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(18),
+      child: Form(
+        key: _formKeyLogin,
+        child: Column(
+          children: <Widget>[
+            CustomTextFormFieldWidget(
+              iconData: Icons.email,
+              textFieldController: emailController,
+              typeTextField: TypeTextField.email,
+              hintText: "Ketik Email Anda",
+            ),
+            CustomTextFormFieldWidget(
+              iconData: Icons.lock,
+              textFieldController: passwordController,
+              typeTextField: TypeTextField.password,
+              hintText: "Ketik Kata Sandi / Password",
+            ),
+
+            const SizedBox(height: 30),
+            SizedBox(
+              height: MediaQuery.of(context).size.width / 7,
+              width: MediaQuery.of(context).size.width / 1.2,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 3,
+                  shadowColor: Colors.black,
+                  backgroundColor: Color(0xFF21ABA5),
+                  // backgroundColor: (buttonName.name == ButtonName.mainButton.name)
+                  //     ? mainGreen
+                  //     : mainWhite,
+                  // (customColor != null)
+                  //     ? customColor
+                  //     : ((buttonName.name == ButtonName.login.name))
+                  //         ? mainGreen
+                  //         : mainWhite,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                ),
+                onPressed: () async {
+                  // BlocProvider.of<AuthBloc>(context).add(
+                  //   LoginEvent(
+                  //     email: emailController.text,
+                  //     password: passwordController.text,
+                  //   ),
+                  BlocProvider.of<AuthBloc>(context).add(
+                    LoginEvent(
+                      email: "indrat.saputra@mail.com",
+                      password: "123123",
+                    ),
+                  );
+
+                  // // SignInSignUpResult result =
+                  // var result = await AuthServices.signInWithEmail(
+                  //   email: emailController.text,
+                  //   pass: passwordController.text,
+                  // );
+
+                  // print(
+                  //     ">>>result  : ${result.user} - ${result.message}");
+
+                  // Navigator.pushAndRemoveUntil(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => DashboardScreen(),
+                  //     ),
+                  //     (route) => false);
+                },
+                // () {
+                //   (buttonName.name == ButtonName.mainButton.name)
+                //       ? Navigator.pushNamed(context, AppRoutes.login)
+                //       : Navigator.pushNamed(context, AppRoutes.register);
+                // },
+                child: const Text(
+                  // (buttonName.name == ButtonName.login.name) ? "LOGIN" : "DAFTAR",
+                  "Login",
+                  style: TextStyle(
+                    fontSize: 22,
+                    // color: (buttonName.name == ButtonName.mainButton.name)
+                    //     ? mainWhite
+                    //     : mainGreen,
+                  ),
+                ),
+              ),
+            ),
+            // const Padding(
+            //   padding: EdgeInsets.only(top: 30),
+            //   child: Text("Atau lanjutkan dengan"),
+            // ),
+            // const SizedBox(height: 30),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     border: Border.all(color: Colors.white, width: 2),
+            //     shape: BoxShape.rectangle,
+            //   ),
+            //   child: IconButton(
+            //     onPressed: () {},
+            //     icon: Image.asset(googleLogo),
+            //   ),
+            // ),
+            // const SizedBox(height: 50),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   crossAxisAlignment: CrossAxisAlignment.center,
+            //   children: <Widget>[
+            //     const Text("Belum menjadi anggota?"),
+            //     TextButton(
+            //         onPressed: () {
+            //           // Navigator.pushNamed(
+            //           //     context, AppRoutes.register);
+            //         },
+            //         child: const Text("Daftar sekarang")),
+            //   ],
+            // )
+          ],
+        ),
+      ),
+    );
   }
 }

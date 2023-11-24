@@ -1,8 +1,23 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:onanmedia_test/presentation/login/login_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:onanmedia_test/presentation/bloc/auth_bloc/auth_bloc.dart';
+import 'package:onanmedia_test/presentation/bloc/classroom_bloc/classroom_bloc.dart';
+import 'package:onanmedia_test/presentation/pages/login/login_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+
+      // options: DefaultFirebaseOptions.currentPlatform,
+      options: const FirebaseOptions(
+    apiKey: "AIzaSyD-yvoLPnzOfjb0tgCz80lyAcSYpnPswr4",
+    appId: "1:889765789214:android:0a6f78f519e283d662380f",
+    messagingSenderId: "1043666322353",
+    projectId: "onanmedia-1b9ca",
+  ));
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -10,14 +25,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // color: Color(0xFF21ABA5),
-      theme: ThemeData(
-          appBarTheme: AppBarTheme(
-        color: Color(0xFF21ABA5),
-      )),
-      home: LoginScreen(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => AuthBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ClassroomBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            appBarTheme: const AppBarTheme(
+              color: Color(0xFF21ABA5),
+            ),
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              backgroundColor: Color(0xFF21ABA5),
+            )),
+        home: LoginScreen(),
+      ),
     );
   }
 }

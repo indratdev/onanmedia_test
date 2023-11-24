@@ -1,7 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:onanmedia_test/presentation/pages/classroom/classroom_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  DashboardScreen({
+    super.key,
+    required this.userProfile,
+  });
+
+  User userProfile;
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -21,7 +28,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       {
         "title": "Kelas",
         "icon": Icons.class_,
-        // "onTap": () => Navigator.pushNamed(context, Routes.faqGeneral),
+        "onTap": () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ClassRoomScreen(),
+            ))
       },
       {
         "title": "Mahasiswa",
@@ -33,6 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(">>> ${widget.userProfile}");
     double _widht = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
@@ -49,17 +61,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "David Beckham",
+              widget.userProfile.email ?? "No Name",
               style: TextStyle(
                 fontSize: _widht * 0.05,
               ),
             ),
-            Text(
-              "Dosen Sistem Informasi",
-              style: TextStyle(
-                fontSize: _widht * 0.04,
-              ),
-            ),
+            // Text(
+            //   "Dosen Sistem Informasi",
+            //   style: TextStyle(
+            //     fontSize: _widht * 0.04,
+            //   ),
+            // ),
           ],
         ),
         actions: [
@@ -80,7 +92,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               SizedBox(
                 width: double.infinity,
-                height: MediaQuery.sizeOf(context).height / 5,
+                height: MediaQuery.sizeOf(context).height / 4,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(18),
                   child: Image.network(
@@ -116,33 +128,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 80,
                       // childAspectRatio: 5 / 4,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20,
                     ),
                     itemCount: listMainMenu.length,
                     itemBuilder: (BuildContext ctx, index) {
                       Map<String, dynamic> data = listMainMenu[index];
-                      return Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          // color: Colors.amber,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(bottom: 4),
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(.3),
-                                  // color: Color(0xFF21ABA5).withOpacity(.5),
-                                  borderRadius: BorderRadius.circular(8),
+                      return InkWell(
+                        onTap: data["onTap"],
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            // color: Colors.amber,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  // height: double.infinity,
+                                  margin: EdgeInsets.only(bottom: 4),
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(.3),
+                                    // color: Color(0xFF21ABA5).withOpacity(.5),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(data["icon"]),
                                 ),
-                                child: Icon(data["icon"]),
-                              ),
-                              Text(data["title"]),
-                            ]),
+                                Text(data["title"]),
+                              ]),
+                        ),
                       );
                     }),
               ),

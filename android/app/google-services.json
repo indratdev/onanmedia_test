@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "889765789214",
+    "project_id": "onanmedia-1b9ca",
+    "storage_bucket": "onanmedia-1b9ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889765789214:android:0a6f78f519e283d662380f",
+        "android_client_info": {
+          "package_name": "com.example.onanmedia_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-yvoLPnzOfjb0tgCz80lyAcSYpnPswr4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
