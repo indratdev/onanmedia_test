@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onanmedia_test/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:onanmedia_test/presentation/bloc/classroom_bloc/classroom_bloc.dart';
+import 'package:onanmedia_test/presentation/bloc/student_bloc/student_bloc.dart';
 import 'package:onanmedia_test/presentation/pages/login/login_screen.dart';
 
 Future<void> main() async {
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ClassroomBloc(),
+        ),
+        BlocProvider(
+          create: (context) => StudentBloc(),
         ),
       ],
       child: MaterialApp(

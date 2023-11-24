@@ -3,12 +3,8 @@ import 'package:dartz/dartz.dart';
 
 class FireService {
   // static const String userCollection = "users";
-  // static const String listUserCollection = "list_user";
-  // static const String customersCollection = "customers";
-  // static const String tablesCollection = "tables";
-  // static const String categoryCollection = "categories";
-  // static const String itemsCollection = "items";
   static const String classRoomCollection = "classrooms";
+  static const String studentCollection = "students";
 
   // getCompanyID(RoleUsers roleUsers) async {
   //   String companyID = "";

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:onanmedia_test/presentation/pages/classroom/classroom_screen.dart';
+import 'package:onanmedia_test/presentation/pages/student/student_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({
@@ -37,7 +38,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
       {
         "title": "Mahasiswa",
         "icon": Icons.people,
-        "onTap": null,
+        "onTap": () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const StudentScreen(),
+            ))
       },
     ];
   }

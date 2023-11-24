@@ -1,26 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onanmedia_test/data/services/fire_query.dart';
-import 'package:onanmedia_test/presentation/bloc/classroom_bloc/classroom_bloc.dart';
+import 'package:onanmedia_test/presentation/bloc/student_bloc/student_bloc.dart';
+import 'package:onanmedia_test/presentation/pages/student/student_manage_screen.dart';
 
-class ClassRoomScreen extends StatelessWidget {
-  const ClassRoomScreen({super.key});
+import '../../../data/services/fire_query.dart';
+
+class StudentScreen extends StatelessWidget {
+  const StudentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("KELAS"),
+        title: const Text("MAHASISWA"),
         centerTitle: true,
       ),
-      floatingActionButton: ClassRoomAddWidget(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const StudentManageScreen(),
+            )),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: BlocListener<ClassroomBloc, ClassroomState>(
+        child: BlocListener<StudentBloc, StudentState>(
           listener: (context, state) {
-            if (state is LoadingAddClassRoom) {
+            if (state is LoadingAddStudent) {
               showDialog(
                   barrierDismissible: false,
                   context: context,
@@ -53,7 +61,7 @@ class ClassRoomScreen extends StatelessWidget {
                   });
             }
 
-            if (state is FailureAddClassRoom) {
+            if (state is FailureAddStudent) {
               showDialog(
                 context: context,
                 builder: (context) {
@@ -87,7 +95,7 @@ class ClassRoomScreen extends StatelessWidget {
               );
             }
 
-            if (state is SuccessAddClassRoom) {
+            if (state is SuccessAddStudent) {
               Navigator.pop(context);
               showDialog(
                 context: context,
@@ -123,8 +131,7 @@ class ClassRoomScreen extends StatelessWidget {
             }
           },
           child: StreamBuilder(
-              stream: FireQuery().readClassRoom(
-                  FirebaseAuth.instance.currentUser?.email ?? ""),
+              stream: FireQuery().readStudent(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(child: Text(snapshot.error.toString()));
@@ -138,6 +145,10 @@ class ClassRoomScreen extends StatelessWidget {
                 if (snapshot.hasData) {
                   List<QueryDocumentSnapshot<Map<String, dynamic>>>? datas =
                       snapshot.data?.docs;
+
+                  if (snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text("Tidak ada data !"));
+                  }
 
                   return ListView.builder(
                     shrinkWrap: true,
@@ -182,16 +193,16 @@ class ClassRoomScreen extends StatelessWidget {
   }
 }
 
-class ClassRoomAddWidget extends StatefulWidget {
-  const ClassRoomAddWidget({
+class StudentAddWidget extends StatefulWidget {
+  const StudentAddWidget({
     super.key,
   });
 
   @override
-  State<ClassRoomAddWidget> createState() => _ClassRoomAddWidgetState();
+  State<StudentAddWidget> createState() => _StudentAddWidgetState();
 }
 
-class _ClassRoomAddWidgetState extends State<ClassRoomAddWidget> {
+class _StudentAddWidgetState extends State<StudentAddWidget> {
   TextEditingController nameController = TextEditingController();
 
   @override
@@ -229,8 +240,8 @@ class _ClassRoomAddWidgetState extends State<ClassRoomAddWidget> {
 
                     if (value != "") {
                       print("jalan");
-                      BlocProvider.of<ClassroomBloc>(context)
-                          .add(AddClassRoomEvent(classRoomName: value));
+                      // BlocProvider.of<ClassroomBloc>(context)
+                      //     .add(AddClassRoomEvent(classRoomName: value));
                       Navigator.pop(context);
                     }
                   },
@@ -238,37 +249,10 @@ class _ClassRoomAddWidgetState extends State<ClassRoomAddWidget> {
                 ),
               ],
             );
-            // return Container(
-
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(18),
-            //     color: Colors.white,
-            //   ),
-            //   width: MediaQuery.sizeOf(context).width / 2,
-            //   height: MediaQuery.sizeOf(context).width / 3,
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     crossAxisAlignment: CrossAxisAlignment.center,
-            //     children: [
-            //       Text("state.messageError"),
-            //       const SizedBox(height: 8),
-            //       ElevatedButton(
-            //         style: ElevatedButton.styleFrom(
-            //             backgroundColor: const Color(0xFF2DBAB1)),
-            //         onPressed: () {
-            //           Navigator.pop(context);
-            //         },
-            //         child: const Text("OK"),
-            //       )
-            //     ],
-            //   ),
-            // );
           },
         );
       },
-      child: Icon(
-        Icons.add,
-      ),
+      child: const Icon(Icons.add),
     );
   }
 }

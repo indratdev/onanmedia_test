@@ -8,4 +8,11 @@ class FireQuery {
         .where('addBy', isEqualTo: addBy)
         .snapshots();
   }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> readStudent() {
+    return FirebaseFirestore.instance
+        .collection(FireService.studentCollection)
+        // .where('addBy', isEqualTo: addBy)
+        .snapshots();
+  }
 }
