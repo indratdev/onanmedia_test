@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../services/auth_service.dart';
-import '../../../services/signsignup.dart';
+import '../../../data/services/auth_service.dart';
+import '../../../data/services/signsignup.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -22,11 +22,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (result.user != null) {
           emit(SuccessLogin(result: result.user!));
         } else {
-          // emit(FailureLogin(messageError: result.message));
           emit(FailureLogin(messageError: "Failed to login"));
         }
       } catch (e) {
-        // emit(FailureLogin(messageError: e.toString()));
         emit(FailureLogin(messageError: "Failed to login"));
       }
     });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:onanmedia_test/shared/utils/global_variables.dart';
 
 import '../shared/utils/validator.dart';
 
@@ -42,12 +43,6 @@ class _CustomTextFormFieldWidgetState extends State<CustomTextFormFieldWidget> {
     return result;
   }
 
-  // @override
-  // void dispose() {
-  //   widget.textFieldController.dispose;
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -63,8 +58,9 @@ class _CustomTextFormFieldWidgetState extends State<CustomTextFormFieldWidget> {
           filled: true,
           prefixIcon: Icon(
             widget.iconData,
-            color: const Color(0xFF21ABA5),
+            color: GlobalVariables.baseColor,
           ),
+
           hintText: widget.hintText,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18),

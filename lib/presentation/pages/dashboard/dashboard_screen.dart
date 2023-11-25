@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:onanmedia_test/presentation/pages/classroom/classroom_screen.dart';
 import 'package:onanmedia_test/presentation/pages/student/student_screen.dart';
+import 'package:onanmedia_test/shared/utils/global_variables.dart';
 
 class DashboardScreen extends StatefulWidget {
   DashboardScreen({
@@ -30,26 +31,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
         "title": "Kelas",
         "icon": Icons.class_,
         "onTap": () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ClassRoomScreen(),
-            ))
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ClassRoomScreen(),
+              ),
+            )
       },
       {
         "title": "Mahasiswa",
         "icon": Icons.people,
         "onTap": () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const StudentScreen(),
-            ))
+              context,
+              MaterialPageRoute(
+                builder: (context) => const StudentScreen(),
+              ),
+            )
       },
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    print(">>> ${widget.userProfile}");
     double _widht = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
@@ -71,12 +73,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 fontSize: _widht * 0.05,
               ),
             ),
-            // Text(
-            //   "Dosen Sistem Informasi",
-            //   style: TextStyle(
-            //     fontSize: _widht * 0.04,
-            //   ),
-            // ),
           ],
         ),
         actions: [
@@ -128,45 +124,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Container(
                 margin: const EdgeInsets.fromLTRB(8, 12, 8, 8),
                 child: GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 80,
-                      // childAspectRatio: 5 / 4,
-                      crossAxisSpacing: 20,
-                      mainAxisSpacing: 20,
-                    ),
-                    itemCount: listMainMenu.length,
-                    itemBuilder: (BuildContext ctx, index) {
-                      Map<String, dynamic> data = listMainMenu[index];
-                      return InkWell(
-                        onTap: data["onTap"],
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            // color: Colors.amber,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  width: double.infinity,
-                                  // height: double.infinity,
-                                  margin: EdgeInsets.only(bottom: 4),
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(.3),
-                                    // color: Color(0xFF21ABA5).withOpacity(.5),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Icon(data["icon"]),
-                                ),
-                                Text(data["title"]),
-                              ]),
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 80,
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                  ),
+                  itemCount: listMainMenu.length,
+                  itemBuilder: (BuildContext ctx, index) {
+                    Map<String, dynamic> data = listMainMenu[index];
+                    return InkWell(
+                      onTap: data["onTap"],
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          // color: Colors.amber,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                      );
-                    }),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                margin: const EdgeInsets.only(bottom: 4),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(.3),
+                                  // color: GlobalVariables.baseColor).withOpacity(.5),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(data["icon"]),
+                              ),
+                              Text(data["title"]),
+                            ]),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),

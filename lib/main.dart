@@ -5,6 +5,7 @@ import 'package:onanmedia_test/presentation/bloc/auth_bloc/auth_bloc.dart';
 import 'package:onanmedia_test/presentation/bloc/classroom_bloc/classroom_bloc.dart';
 import 'package:onanmedia_test/presentation/bloc/student_bloc/student_bloc.dart';
 import 'package:onanmedia_test/presentation/pages/login/login_screen.dart';
+import 'package:onanmedia_test/shared/utils/global_variables.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,12 +42,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-              color: Color(0xFF21ABA5),
-            ),
-            floatingActionButtonTheme: FloatingActionButtonThemeData(
-              backgroundColor: Color(0xFF21ABA5),
-            )),
+          appBarTheme: AppBarTheme(color: GlobalVariables.baseColor),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: GlobalVariables.baseColor,
+          ),
+        ),
         home: LoginScreen(),
       ),
     );

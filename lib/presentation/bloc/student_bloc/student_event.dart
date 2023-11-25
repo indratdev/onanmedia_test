@@ -8,9 +8,27 @@ sealed class StudentEvent extends Equatable {
 }
 
 class AddStudentEvent extends StudentEvent {
-  String studentName;
+  StudentModel studentModel;
 
   AddStudentEvent({
-    required this.studentName,
+    required this.studentModel,
+  });
+}
+
+class UpdateStudentEvent extends StudentEvent {
+  String id;
+  StudentModel studentModel;
+
+  UpdateStudentEvent({
+    required this.id,
+    required this.studentModel,
+  });
+}
+
+class DeleteStudentEvent extends StudentEvent {
+  String id;
+
+  DeleteStudentEvent({
+    required this.id,
   });
 }

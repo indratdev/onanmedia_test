@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:onanmedia_test/data/services/fire_query.dart';
 import 'package:onanmedia_test/presentation/bloc/classroom_bloc/classroom_bloc.dart';
+import 'package:onanmedia_test/presentation/pages/classroom/widgets/classroom_add_widget.dart';
 
 class ClassRoomScreen extends StatelessWidget {
   const ClassRoomScreen({super.key});
@@ -139,6 +140,10 @@ class ClassRoomScreen extends StatelessWidget {
                   List<QueryDocumentSnapshot<Map<String, dynamic>>>? datas =
                       snapshot.data?.docs;
 
+                  if (datas?.length == 0) {
+                    return const Center(child: Text("Tidak Ada Data !"));
+                  }
+
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: datas?.length ?? 0,
@@ -164,110 +169,17 @@ class ClassRoomScreen extends StatelessWidget {
                                   fontSize:
                                       MediaQuery.sizeOf(context).width * 0.045),
                             ),
-                            Icon(Icons.arrow_forward_ios_rounded),
+                            const Icon(Icons.arrow_forward_ios_rounded),
                           ],
                         ),
                       );
                     },
                   );
                 } else {
-                  return Container(
-                    child: Text("No data"),
-                  );
+                  return const Center(child: Text("Tidak Ada Data !"));
                 }
               }),
         ),
-      ),
-    );
-  }
-}
-
-class ClassRoomAddWidget extends StatefulWidget {
-  const ClassRoomAddWidget({
-    super.key,
-  });
-
-  @override
-  State<ClassRoomAddWidget> createState() => _ClassRoomAddWidgetState();
-}
-
-class _ClassRoomAddWidgetState extends State<ClassRoomAddWidget> {
-  TextEditingController nameController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Masukan Nama Kelas'),
-              content: TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  hintText: "Ketik nama kelas",
-                ),
-              ),
-              actions: <Widget>[
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('BATAL'),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2DBAB1),
-                  ),
-                  onPressed: () {
-                    String value = (nameController.text).trim();
-
-                    if (value != "") {
-                      print("jalan");
-                      BlocProvider.of<ClassroomBloc>(context)
-                          .add(AddClassRoomEvent(classRoomName: value));
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: const Text('SIMPAN'),
-                ),
-              ],
-            );
-            // return Container(
-
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(18),
-            //     color: Colors.white,
-            //   ),
-            //   width: MediaQuery.sizeOf(context).width / 2,
-            //   height: MediaQuery.sizeOf(context).width / 3,
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     crossAxisAlignment: CrossAxisAlignment.center,
-            //     children: [
-            //       Text("state.messageError"),
-            //       const SizedBox(height: 8),
-            //       ElevatedButton(
-            //         style: ElevatedButton.styleFrom(
-            //             backgroundColor: const Color(0xFF2DBAB1)),
-            //         onPressed: () {
-            //           Navigator.pop(context);
-            //         },
-            //         child: const Text("OK"),
-            //       )
-            //     ],
-            //   ),
-            // );
-          },
-        );
-      },
-      child: Icon(
-        Icons.add,
       ),
     );
   }

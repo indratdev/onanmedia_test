@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:onanmedia_test/repository/classroom_repository.dart';
+import 'package:onanmedia_test/domain/repository/classroom_repository.dart';
 
 part 'classroom_event.dart';
 part 'classroom_state.dart';
